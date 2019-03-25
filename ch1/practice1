@@ -1,0 +1,34 @@
+import requests
+from bs4 import BeautifulSoup
+
+
+def main():
+    try:
+        resp = requests.get('http://blog.castman.net/web-crawler-tutorial/ch1/connect.html')
+        if resp.status_code == 200:
+            # get title
+            tag = 'title'
+            get_text(resp.text, tag)
+
+            # get p
+            tag = 'p'
+            get_text(resp.text, tag)
+
+            # try others
+            tag = 'button'
+            get_text(resp.text, tag)
+
+    except Exception as e:
+        return None
+
+
+def get_text(resp_text, head_tag):
+    try:
+        soup = BeautifulSoup(resp_text, 'html.parser')
+        return print("tag:{} > {}".format(head_tag, soup.find(head_tag).text))
+    except Exception as e:
+        return print("tag:{} is not in the webpage".format(head_tag))
+
+
+if __name__  == '__main__':
+    main()
