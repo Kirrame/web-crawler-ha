@@ -1,0 +1,39 @@
+import requests
+from bs4 import BeautifulSoup
+import re
+
+
+def tag_exist(find_def):
+    try:
+        return find_def
+
+    except:
+        return None
+
+
+def main():
+    req = requests.get("https://www.dcard.tw/f")
+    soup = BeautifulSoup(req.text, 'html.parser')
+
+    # Check article rule
+    ranking_way = tag_exist(soup.find('span', {'class': 'PostListHeader__Highlight-aa5hy3-4 jwKQjW'})).text
+
+    if str(ranking_way) == '熱門':
+        # Get article title
+        title_box = soup.find_all('h3', {'class': re.compile('PostEntry_title.*')})
+
+        if len(title_box) == 0:
+            print("No article")
+            exit(0)
+
+        for item in title_box:
+            if title_box.index(item)+1 <= 10:
+                print(title_box.index(item) + 1, item.text)
+
+    else:
+        print("Check DCard article ranking: {} ?".format(str(ranking_way)))
+
+
+if __name__ == '__main__':
+    main()
+

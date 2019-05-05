@@ -1,0 +1,23 @@
+import requests
+from bs4 import BeautifulSoup
+
+
+def main():
+
+    req = requests.get('http://blog.castman.net/web-crawler-tutorial/ch2/table/table.html')
+    soup = BeautifulSoup(req.text, 'html.parser')
+
+    # Practice3
+    rows = soup.find('table', 'table').tbody.find_all('tr')
+
+    table_text = []
+    for i in rows:
+        table_text.append(j for j in i.stripped_strings)
+
+    print("[Practice3]")
+    print("There are {} courses.".format(len(table_text)))
+    print('\n'.join([''.join(['{}'.format(item) for item in row]) for row in table_text]))
+
+
+if __name__ == '__main__' :
+    main()

@@ -1,0 +1,36 @@
+import requests
+from bs4 import BeautifulSoup
+import re
+
+
+def main():
+
+    req = requests.get('http://blog.castman.net/web-crawler-tutorial/ch2/blog/blog.html')
+    soup = BeautifulSoup(req.text, 'html.parser')
+
+    # Practice1
+    list = soup.find_all('h4', {'class': 'card-title'})
+    title = []
+
+    for i in list:
+        title.append(i.text.strip())
+
+    print("[Practice1]")
+    print("Amounts of articles: {} ".format(str(len(title))))
+    print("Titles are:")
+    print('\n'.join(str(e) for e in title))
+
+    # Practice2
+    src = []
+    for img in soup.find_all('img', {'src': re.compile('crawler.*')}):
+        src.append(img['src'])
+
+    print("[Practice2]")
+    print("There are {} links of picture contain 'crawler'".format(len(src)))
+    print("src are:")
+    print('\n'.join(str(e) for e in src))
+
+
+
+if __name__ == '__main__' :
+    main()
